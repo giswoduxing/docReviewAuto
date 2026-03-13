@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: doc-review-backend
+  profiles:
+    default: local
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+  datasource:
+    url: "${DB_URL:jdbc:mysql://127.0.0.1:3306/doc_review_auto?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}"
+    username: ${DB_USERNAME:doc_review}
+    password: ${DB_PASSWORD:doc_review}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      initialization-fail-timeout: 0
+      connection-timeout: 3000
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2s
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      key-prefix: "doc-review:auto:"
+      time-to-live: 10m
+  ai:
+    dashscope:
+      enabled: false
+      api-key: ${DASHSCOPE_API_KEY:}
+      agent:
+        enabled: false
+      chat:
+        enabled: false
+        options:
+          model: ${DASHSCOPE_MODEL:qwen-turbo}
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+doc-review:
+  security:
+    admin-username: ${BOOTSTRAP_ADMIN_USERNAME:framework-admin}
+    admin-password: ${BOOTSTRAP_ADMIN_PASSWORD:ChangeMe_123456}
+  ai:
+    system-prompt-template: |
+      You are the backend bootstrap assistant for locale {locale}.
+      Follow enterprise review constraints and answer concisely.
