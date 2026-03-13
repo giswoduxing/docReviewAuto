@@ -51,7 +51,7 @@ const items = computed(() =>
     </nav>
 
     <div class="sidebar__footer">
-      <strong>{{ t(`shell.theme.${appStore.accentMode}`) }}</strong>
+      <strong>{{ sessionStore.organizationName || t('shell.theme.' + appStore.accentMode) }}</strong>
       <span>{{ t('shell.securityNote') }}</span>
     </div>
   </aside>

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import routes from './routes'
+import routes, { findDefaultAppRoute } from './routes'
 import { useSessionStore } from '@/stores/session'
 
 const router = createRouter({
@@ -12,12 +12,39 @@ const router = createRouter({
   }
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const sessionStore = useSessionStore()
+
+  if (!sessionStore.initialized) {
+    try {
+      await sessionStore.initializeSession()
+    } catch (error) {
+      if (to.name !== 'login') {
+        return {
+          name: 'login'
+        }
+      }
+    }
+  }
+
+  if (to.meta?.guestOnly && sessionStore.isAuthenticated) {
+    return {
+      name: findDefaultAppRoute(sessionStore)
+    }
+  }
+
+  if (!to.meta?.public && !sessionStore.isAuthenticated) {
+    return {
+      name: 'login',
+      query: {
+        redirect: to.fullPath
+      }
+    }
+  }
 
   if (to.meta?.permission && !sessionStore.hasPermission(to.meta.permission)) {
     return {
-      name: 'dashboard'
+      name: findDefaultAppRoute(sessionStore)
     }
   }
 

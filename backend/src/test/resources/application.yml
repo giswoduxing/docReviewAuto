@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:docreview_test;MODE=MySQL;DB_CLOSE_DELAY=-1;NON_KEYWORDS=USER
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  cache:
+    type: simple
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+doc-review:
+  security:
+    admin-username: admin
+    admin-password: A123456!
+    max-failed-attempts: 3
+    lock-duration: 10m
+  ai:
+    system-prompt-template: Test prompt for {locale}

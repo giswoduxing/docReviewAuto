@@ -10,30 +10,60 @@ export const appRoutes = [
     }
   },
   {
-    path: '/reviews',
-    name: 'reviews',
-    component: () => import('@/views/reviews/ReviewQueueView.vue'),
+    path: '/organizations',
+    name: 'organizations',
+    component: () => import('@/views/organizations/OrganizationManagementView.vue'),
     meta: {
       icon: '02',
-      titleKey: 'nav.reviews',
-      descriptionKey: 'nav.reviewsDescription',
-      permission: 'reviews:approve'
+      titleKey: 'nav.organizations',
+      descriptionKey: 'nav.organizationsDescription',
+      permission: 'organization:manage'
     }
   },
   {
-    path: '/settings',
-    name: 'settings',
-    component: () => import('@/views/settings/WorkspaceSettingsView.vue'),
+    path: '/roles',
+    name: 'roles',
+    component: () => import('@/views/roles/RoleManagementView.vue'),
     meta: {
       icon: '03',
-      titleKey: 'nav.settings',
-      descriptionKey: 'nav.settingsDescription',
-      permission: 'settings:update'
+      titleKey: 'nav.roles',
+      descriptionKey: 'nav.rolesDescription',
+      permission: 'role:manage'
+    }
+  },
+  {
+    path: '/users',
+    name: 'users',
+    component: () => import('@/views/users/UserManagementView.vue'),
+    meta: {
+      icon: '04',
+      titleKey: 'nav.users',
+      descriptionKey: 'nav.usersDescription',
+      permission: 'user:manage'
     }
   }
 ]
 
+export function findDefaultAppRoute(sessionStore) {
+  const accessibleRoute = appRoutes.find((route) =>
+    !route.meta?.permission || sessionStore.hasPermission(route.meta.permission)
+  )
+
+  return accessibleRoute?.name || 'dashboard'
+}
+
 const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/auth/LoginView.vue'),
+    meta: {
+      public: true,
+      guestOnly: true,
+      titleKey: 'login.title',
+      descriptionKey: 'login.subtitle'
+    }
+  },
   {
     path: '/',
     component: () => import('@/layouts/AppShell.vue'),
@@ -45,7 +75,8 @@ const routes = [
     name: 'not-found',
     component: () => import('@/views/error/NotFoundView.vue'),
     meta: {
-      hidden: true
+      hidden: true,
+      public: true
     }
   }
 ]

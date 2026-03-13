@@ -2,66 +2,42 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import KpiCard from '@/components/dashboard/KpiCard.vue'
+import { appRoutes } from '@/router/routes'
+import { useSessionStore } from '@/stores/session'
 
 const { t } = useI18n()
+const sessionStore = useSessionStore()
+
+const quickLinks = computed(() =>
+  appRoutes.filter((route) =>
+    route.name !== 'dashboard' && (!route.meta?.permission || sessionStore.hasPermission(route.meta.permission))
+  )
+)
 
 const metrics = computed(() => [
   {
-    label: t('dashboard.metrics.pending.label'),
-    value: '18',
-    hint: t('dashboard.metrics.pending.hint'),
+    label: t('dashboard.metrics.identity.label'),
+    value: sessionStore.displayName || '--',
+    hint: t('dashboard.metrics.identity.hint'),
     tone: 'accent'
   },
   {
-    label: t('dashboard.metrics.velocity.label'),
-    value: '6 h',
-    hint: t('dashboard.metrics.velocity.hint'),
+    label: t('dashboard.metrics.roles.label'),
+    value: String(sessionStore.profile?.roleNames?.length || 0),
+    hint: t('dashboard.metrics.roles.hint'),
     tone: 'sun'
   },
   {
-    label: t('dashboard.metrics.coverage.label'),
-    value: '100%',
-    hint: t('dashboard.metrics.coverage.hint'),
+    label: t('dashboard.metrics.permissions.label'),
+    value: String(sessionStore.permissions.length),
+    hint: t('dashboard.metrics.permissions.hint'),
     tone: 'neutral'
   },
   {
-    label: t('dashboard.metrics.latency.label'),
-    value: '12 s',
-    hint: t('dashboard.metrics.latency.hint'),
+    label: t('dashboard.metrics.lockout.label'),
+    value: t('dashboard.metrics.lockout.value'),
+    hint: t('dashboard.metrics.lockout.hint'),
     tone: 'neutral'
-  }
-])
-
-const stages = computed(() => [
-  {
-    title: t('dashboard.stages.intake.title'),
-    description: t('dashboard.stages.intake.description'),
-    badge: t('common.active')
-  },
-  {
-    title: t('dashboard.stages.workspace.title'),
-    description: t('dashboard.stages.workspace.description'),
-    badge: t('common.stable')
-  },
-  {
-    title: t('dashboard.stages.service.title'),
-    description: t('dashboard.stages.service.description'),
-    badge: t('common.planned')
-  }
-])
-
-const activities = computed(() => [
-  {
-    title: t('dashboard.activity.first.title'),
-    meta: t('dashboard.activity.first.meta')
-  },
-  {
-    title: t('dashboard.activity.second.title'),
-    meta: t('dashboard.activity.second.meta')
-  },
-  {
-    title: t('dashboard.activity.third.title'),
-    meta: t('dashboard.activity.third.meta')
   }
 ])
 
@@ -81,30 +57,28 @@ const checklist = computed(() => [
 
       <div class="button-row">
         <RouterLink
+          v-for="item in quickLinks"
+          :key="item.name"
           class="primary-button"
-          :to="{ name: 'reviews' }"
+          :to="{ name: item.name }"
         >
-          {{ t('dashboard.hero.primaryAction') }}
-        </RouterLink>
-        <RouterLink
-          class="ghost-button"
-          :to="{ name: 'settings' }"
-        >
-          {{ t('dashboard.hero.secondaryAction') }}
+          {{ t(item.meta.titleKey) }}
         </RouterLink>
       </div>
     </div>
 
     <div class="hero-card__aside">
       <div class="hero-card__ring">
-        <strong>{{ t('tech.vue3') }}</strong>
-        <span>{{ t('tech.viteJs') }}</span>
+        <strong>{{ sessionStore.organizationName || t('dashboard.hero.emptyOrganization') }}</strong>
+        <span>{{ sessionStore.roleLabel || t('shell.noRole') }}</span>
       </div>
       <div class="hero-card__stack">
-        <span>{{ t('tech.pinia') }}</span>
-        <span>{{ t('tech.router') }}</span>
-        <span>{{ t('tech.i18n') }}</span>
-        <span>{{ t('tech.axios') }}</span>
+        <span
+          v-for="permission in sessionStore.permissions"
+          :key="permission"
+        >
+          {{ permission }}
+        </span>
       </div>
     </div>
   </section>
@@ -123,53 +97,37 @@ const checklist = computed(() => [
   <section class="panel-grid panel-grid--two-up">
     <article class="panel">
       <div class="panel__header">
-        <h3>{{ t('dashboard.stages.title') }}</h3>
+        <h3>{{ t('dashboard.quickStart.title') }}</h3>
       </div>
       <div class="stack-list">
         <div
-          v-for="stage in stages"
-          :key="stage.title"
+          v-for="item in checklist"
+          :key="item"
           class="stage-card"
         >
-          <div class="stage-card__header">
-            <strong>{{ stage.title }}</strong>
-            <span class="status-pill">{{ stage.badge }}</span>
-          </div>
-          <p>{{ stage.description }}</p>
+          <strong>{{ item }}</strong>
         </div>
       </div>
     </article>
 
     <article class="panel">
       <div class="panel__header">
-        <h3>{{ t('dashboard.activity.title') }}</h3>
+        <h3>{{ t('dashboard.session.title') }}</h3>
       </div>
       <div class="stack-list">
-        <div
-          v-for="item in activities"
-          :key="item.title"
-          class="timeline-item"
-        >
-          <strong>{{ item.title }}</strong>
-          <p>{{ item.meta }}</p>
+        <div class="timeline-item">
+          <strong>{{ t('dashboard.session.username') }}</strong>
+          <p>{{ sessionStore.profile?.username || '--' }}</p>
+        </div>
+        <div class="timeline-item">
+          <strong>{{ t('dashboard.session.roles') }}</strong>
+          <p>{{ sessionStore.roleLabel || t('shell.noRole') }}</p>
+        </div>
+        <div class="timeline-item">
+          <strong>{{ t('dashboard.session.permissions') }}</strong>
+          <p>{{ sessionStore.permissions.join(', ') || '--' }}</p>
         </div>
       </div>
     </article>
-  </section>
-
-  <section class="panel">
-    <div class="panel__header">
-      <h3>{{ t('dashboard.checklist.title') }}</h3>
-    </div>
-    <div class="checklist">
-      <div
-        v-for="item in checklist"
-        :key="item"
-        class="checklist__item"
-      >
-        <span class="checklist__mark">+</span>
-        <span>{{ item }}</span>
-      </div>
-    </div>
   </section>
 </template>
