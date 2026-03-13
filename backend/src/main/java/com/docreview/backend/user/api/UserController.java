@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,11 +28,20 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('user:manage')")
     public ApiResponse<PageResult<UserSummary>> listUsers(@Valid @ModelAttribute UserPageQuery query) {
         return ApiResponse.success(
             messageResolver.getMessage("user.list.success"),
             systemUserService.listUsers(query)
+        );
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('user:manage')")
+    public ApiResponse<UserSummary> createUser(@Valid @RequestBody CreateUserRequest request) {
+        return ApiResponse.success(
+            messageResolver.getMessage("user.create.success"),
+            systemUserService.createUser(request)
         );
     }
 }

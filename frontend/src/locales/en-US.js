@@ -1,19 +1,16 @@
 export default {
   app: {
     title: 'Doc Review Console',
-    subtitle: 'Vue 3 + JavaScript frontend starter'
+    subtitle: 'User, role, and organization bootstrap center'
   },
   shell: {
-    brandEyebrow: 'Workflow Seed',
+    brandEyebrow: 'Admin Workspace',
     workspaceEyebrow: 'Current module',
-    securityNote: 'In-memory session and permission directive are enabled by default.',
-    operatorName: 'Console Operator',
-    role: 'Review Operations',
+    securityNote: 'Server-side sessions, BCrypt passwords, and timed lockout are active.',
     toggleSidebar: 'Toggle sidebar',
-    locales: {
-      zhCN: 'Chinese',
-      enUS: 'English'
-    },
+    logout: 'Logout',
+    anonymous: 'Anonymous',
+    noRole: 'No role assigned',
     theme: {
       sunrise: 'Sunrise',
       slate: 'Slate'
@@ -21,196 +18,177 @@ export default {
   },
   nav: {
     dashboard: 'Dashboard',
-    dashboardDescription: 'Delivery pulse and runtime snapshot',
-    reviews: 'Review queue',
-    reviewsDescription: 'Browse sample work items and actions',
-    settings: 'Workspace settings',
-    settingsDescription: 'Framework configuration and conventions'
+    dashboardDescription: 'Bootstrap status and access summary',
+    organizations: 'Organizations',
+    organizationsDescription: 'Create and view organization nodes',
+    roles: 'Roles',
+    rolesDescription: 'Assign menu permissions to roles',
+    users: 'Users',
+    usersDescription: 'Create user accounts and role bindings'
   },
   common: {
-    active: 'Active',
-    stable: 'Stable',
-    planned: 'Planned',
-    enabled: 'Enabled',
-    disabled: 'Disabled',
-    compact: 'Compact',
-    expanded: 'Expanded',
-    approve: 'Approve',
-    reject: 'Reject',
-    escalate: 'Escalate',
-    backHome: 'Back to dashboard'
-  },
-  tech: {
-    vue3: 'Vue 3',
-    vueRouter: 'Vue Router',
-    viteJs: 'Vite + JS',
-    pinia: 'Pinia',
-    router: 'Router',
-    axios: 'Axios',
-    i18n: 'i18n',
-    vueI18n: 'vue-i18n',
-    permissionDirective: 'v-permission'
+    loading: 'Loading...',
+    saving: 'Saving...',
+    reset: 'Reset'
   },
   request: {
     error: {
       unknown: 'Request failed. Please try again later.'
     }
   },
-  dashboard: {
-    hero: {
-      eyebrow: 'Frontend foundation',
-      title: 'One shell for routing, state, and page scaffolding',
-      description: 'This starter provides layout, i18n, permission placeholders, and an HTTP layer so follow-up modules can expand on a consistent structure.',
-      primaryAction: 'Open review queue',
-      secondaryAction: 'Open workspace settings'
-    },
-    metrics: {
-      pending: {
-        label: 'Pending reviews',
-        hint: 'Covers the sample review flow'
+  auth: {
+    permission: {
+      organization: {
+        title: 'Organization management',
+        description: 'Access the organization management menu'
       },
-      velocity: {
-        label: 'Assembly speed',
-        hint: 'Lazy-loaded pages with a shared shell'
+      role: {
+        title: 'Role management',
+        description: 'Access the role management menu'
       },
-      coverage: {
-        label: 'Capability coverage',
-        hint: 'Router / Pinia / i18n / Axios included'
-      },
-      latency: {
-        label: 'Request extension point',
-        hint: 'Interceptors and error normalization are ready'
+      user: {
+        title: 'User management',
+        description: 'Access the user management menu'
       }
-    },
-    stages: {
-      title: 'Layering',
-      intake: {
-        title: 'Entry layer',
-        description: 'Bootstrapped by Vite, env variables, and route definitions.'
-      },
-      workspace: {
-        title: 'Workspace layer',
-        description: 'Provides shared navigation, page headers, and responsive content.'
-      },
-      service: {
-        title: 'Service layer',
-        description: 'Request handling, permissions, and stores are reusable infrastructure.'
-      }
-    },
-    activity: {
-      title: 'Delivered sample surface',
-      first: {
-        title: 'Dashboard summarizes scaffold status',
-        meta: 'Designed to expose current framework capabilities and expansion paths.'
-      },
-      second: {
-        title: 'Review queue can absorb future workflows',
-        meta: 'Ready to be swapped from mock state to real APIs.'
-      },
-      third: {
-        title: 'Workspace settings expose framework toggles',
-        meta: 'Locale, navigation, and theme are driven by central state.'
-      }
-    },
-    checklist: {
-      title: 'Delivery checks',
-      first: 'Axios interceptors and normalized request errors are wired in.',
-      second: 'Visible copy is centralized in the locales directory.',
-      third: 'v-permission demonstrates button-level access control.'
     }
   },
-  reviews: {
-    title: 'Review queue example',
-    summary: 'A card queue simulates document review work items and can later be backed by the real API.',
-    stats: {
-      total: 'Open items',
-      urgent: 'Expiring soon',
-      permissions: 'Granted permissions'
+  dashboard: {
+    hero: {
+      eyebrow: 'Bootstrap control',
+      title: 'Seed the platform, then hand off access safely',
+      description: 'Log in with the built-in administrator, create organizations, define menu-bearing roles, and provision new users who only see the routes their role allows.',
+      emptyOrganization: 'No organization'
     },
-    filters: {
-      all: 'All',
-      highRisk: 'High risk',
-      expiring: 'Expiring soon'
-    },
-    card: {
-      submitted: 'Submitted',
-      type: 'Type',
-      owner: 'Owner',
-      sla: 'Remaining SLA',
-      status: 'Status'
-    },
-    status: {
-      pending: 'Pending',
-      approved: 'Approved',
-      rejected: 'Rejected',
-      escalated: 'Escalated'
-    },
-    risk: {
-      high: 'High risk',
-      medium: 'Medium risk',
-      low: 'Low risk'
-    },
-    feedback: {
-      approved: 'The document was marked as approved.',
-      rejected: 'The document was marked as rejected.',
-      escalated: 'The item was escalated for manual follow-up.'
-    },
-    items: {
-      first: {
-        title: 'Vendor onboarding playbook',
-        owner: 'Compliance team'
+    metrics: {
+      identity: {
+        label: 'Current operator',
+        hint: 'Loaded from the authenticated session.'
       },
-      second: {
-        title: 'External partnership contract',
-        owner: 'Legal team'
+      roles: {
+        label: 'Assigned roles',
+        hint: 'Role summaries returned by the backend session API.'
       },
-      third: {
-        title: 'Privacy policy revision log',
-        owner: 'Data governance'
+      permissions: {
+        label: 'Menu permissions',
+        hint: 'Navigation and guards use these permission codes.'
+      },
+      lockout: {
+        label: 'Lockout policy',
+        value: '3 / 10m',
+        hint: 'Three consecutive failures lock the account for ten minutes.'
       }
     },
-    tags: {
-      policy: 'Policy',
-      contract: 'Contract',
-      privacy: 'Privacy',
-      urgent: 'Urgent',
-      external: 'External'
+    quickStart: {
+      title: 'Quick start'
     },
-    empty: 'No items match the current filter.'
+    checklist: {
+      first: 'Confirm the built-in admin account can reach organization, role, and user management.',
+      second: 'Create a restricted role and bind only the menu permissions that user should see.',
+      third: 'Create a new user, sign in, and verify the navigation is limited to that role.'
+    },
+    session: {
+      title: 'Session snapshot',
+      username: 'Username',
+      roles: 'Roles',
+      permissions: 'Permissions'
+    }
   },
-  settings: {
-    title: 'Workspace settings',
-    description: 'Framework-level controls without pulling in business dependencies.',
-    runtime: {
-      title: 'Runtime configuration',
-      apiBase: 'API base URL',
-      appTitle: 'Application title',
-      locale: 'Default locale',
-      sidebar: 'Sidebar mode',
-      theme: 'Visual theme'
+  login: {
+    eyebrow: 'Secure sign-in',
+    title: 'Login',
+    subtitle: 'Use the seeded administrator to bootstrap organizations, roles, and users.',
+    form: {
+      username: 'Username',
+      usernamePlaceholder: 'Enter your username',
+      password: 'Password',
+      passwordPlaceholder: 'Enter your password',
+      submit: 'Sign in'
     },
-    modules: {
-      title: 'Built-in modules',
-      router: 'Routing shell',
-      state: 'State management',
-      request: 'Request layer',
-      i18n: 'Internationalization',
-      permission: 'Permission directive'
+    defaultAccount: {
+      title: 'Default administrator',
+      description: 'Username `admin`, initial password `A123456!`.'
     },
-    conventions: {
-      title: 'Engineering conventions',
-      first: 'Page modules use route-level lazy loading.',
-      second: 'Session state remains in memory instead of localStorage.',
-      third: 'All visible copy is sourced from locales.'
+    lockout: {
+      title: 'Lockout policy',
+      description: 'After 3 wrong passwords, the account is frozen for 10 minutes.'
+    }
+  },
+  organizations: {
+    form: {
+      title: 'Create organization',
+      description: 'Add departments or business units that new users can belong to.',
+      name: 'Organization name',
+      namePlaceholder: 'Example: Compliance Center',
+      code: 'Organization code',
+      codePlaceholder: 'Example: COMPLIANCE',
+      parent: 'Parent organization',
+      parentPlaceholder: 'No parent / root level',
+      leader: 'Leader',
+      leaderPlaceholder: 'Example: Alice Chen',
+      submit: 'Create organization'
     },
-    controls: {
-      title: 'Interactive toggles',
-      compact: 'Toggle compact sidebar',
-      locale: 'Switch locale',
-      theme: 'Switch theme'
+    list: {
+      title: 'Organization list',
+      emptyTitle: 'No organizations yet',
+      emptyDescription: 'Create the first organization node from the form.'
     },
-    permissions: {
-      title: 'Current session permissions'
+    table: {
+      name: 'Name',
+      code: 'Code',
+      parent: 'Parent',
+      leader: 'Leader',
+      status: 'Status'
+    }
+  },
+  roles: {
+    form: {
+      title: 'Create role',
+      description: 'Choose which menus the role should expose after login.',
+      code: 'Role code',
+      codePlaceholder: 'Example: USER_MANAGER',
+      name: 'Role name',
+      namePlaceholder: 'Example: User Manager',
+      descriptionLabel: 'Role description',
+      descriptionPlaceholder: 'Describe the operational boundary for this role.',
+      permissions: 'Menu permissions',
+      submit: 'Create role'
+    },
+    list: {
+      title: 'Role list',
+      emptyTitle: 'No roles yet',
+      emptyDescription: 'Create a role and assign menu permissions.',
+      builtIn: 'Built-in',
+      noDescription: 'No description'
+    }
+  },
+  users: {
+    form: {
+      title: 'Create user',
+      description: 'Provision a login account, assign its organization, and bind one or more roles.',
+      username: 'Username',
+      usernamePlaceholder: 'Example: jdoe',
+      password: 'Initial password',
+      passwordPlaceholder: 'Use letters, numbers, and symbols',
+      displayName: 'Display name',
+      displayNamePlaceholder: 'Example: Jane Doe',
+      email: 'Email',
+      emailPlaceholder: 'Example: jane.doe@example.com',
+      organization: 'Organization',
+      organizationPlaceholder: 'Select an organization',
+      roles: 'Role bindings',
+      submit: 'Create user'
+    },
+    list: {
+      title: 'User list ({total})',
+      emptyTitle: 'No users yet',
+      emptyDescription: 'Use the form to create the first non-admin account.'
+    },
+    table: {
+      username: 'Username',
+      displayName: 'Display name',
+      organization: 'Organization',
+      roles: 'Roles',
+      status: 'Status'
     }
   },
   notFound: {

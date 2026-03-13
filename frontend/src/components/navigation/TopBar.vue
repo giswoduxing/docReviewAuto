@@ -1,11 +1,12 @@
 <script setup>
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/app'
 import { useSessionStore } from '@/stores/session'
 
 const route = useRoute()
+const router = useRouter()
 const { t } = useI18n()
 const appStore = useAppStore()
 const sessionStore = useSessionStore()
@@ -29,12 +30,25 @@ const pageDescription = computed(() =>
   route.meta?.descriptionKey ? t(route.meta.descriptionKey) : t('app.subtitle')
 )
 
+const avatarLabel = computed(() =>
+  (sessionStore.displayName || t('shell.anonymous')).slice(0, 1).toUpperCase()
+)
+
+const roleLabel = computed(() =>
+  sessionStore.roleLabel || t('shell.noRole')
+)
+
 function toggleSidebar() {
   appStore.toggleSidebar()
 }
 
 function selectLocale(locale) {
   appStore.updateLocale(locale)
+}
+
+async function logout() {
+  await sessionStore.logout()
+  await router.push({ name: 'login' })
 }
 </script>
 
@@ -68,13 +82,21 @@ function selectLocale(locale) {
         </button>
       </div>
 
+      <button
+        type="button"
+        class="ghost-button"
+        @click="logout"
+      >
+        {{ t('shell.logout') }}
+      </button>
+
       <div class="profile-chip">
         <span class="profile-chip__avatar">
-          {{ t(sessionStore.displayNameKey).slice(0, 1) }}
+          {{ avatarLabel }}
         </span>
         <div>
-          <strong>{{ t(sessionStore.displayNameKey) }}</strong>
-          <span>{{ t(sessionStore.roleKey) }}</span>
+          <strong>{{ sessionStore.displayName || t('shell.anonymous') }}</strong>
+          <span>{{ roleLabel }}</span>
         </div>
       </div>
     </div>

@@ -12,12 +12,30 @@ public class SystemUserEntity extends BaseEntity {
 
     private String username;
 
+    @TableField("password_hash")
+    private String passwordHash;
+
     @TableField("display_name")
     private String displayName;
 
     private String email;
 
+    @TableField("organization_id")
+    private Long organizationId;
+
     private String status;
+
+    @TableField("failed_login_attempts")
+    private Integer failedLoginAttempts;
+
+    @TableField("locked_until")
+    private java.time.LocalDateTime lockedUntil;
+
+    @TableField("last_login_at")
+    private java.time.LocalDateTime lastLoginAt;
+
+    @TableField("built_in")
+    private Integer builtIn;
 
     public Long getId() {
         return id;
@@ -33,6 +51,14 @@ public class SystemUserEntity extends BaseEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getDisplayName() {
@@ -51,11 +77,51 @@ public class SystemUserEntity extends BaseEntity {
         this.email = email;
     }
 
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public void setFailedLoginAttempts(Integer failedLoginAttempts) {
+        this.failedLoginAttempts = failedLoginAttempts;
+    }
+
+    public java.time.LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(java.time.LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
+    }
+
+    public java.time.LocalDateTime getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public void setLastLoginAt(java.time.LocalDateTime lastLoginAt) {
+        this.lastLoginAt = lastLoginAt;
+    }
+
+    public Integer getBuiltIn() {
+        return builtIn;
+    }
+
+    public void setBuiltIn(Integer builtIn) {
+        this.builtIn = builtIn;
     }
 }

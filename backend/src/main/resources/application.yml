@@ -30,6 +30,10 @@ spring:
       cache-null-values: false
       key-prefix: "doc-review:auto:"
       time-to-live: 10m
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:/db/schema.sql
   ai:
     dashscope:
       enabled: false
@@ -47,6 +51,11 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+    session:
+      cookie:
+        http-only: true
+        same-site: strict
+      timeout: 30m
 
 management:
   endpoints:
@@ -70,8 +79,10 @@ mybatis-plus:
 
 doc-review:
   security:
-    admin-username: ${BOOTSTRAP_ADMIN_USERNAME:framework-admin}
-    admin-password: ${BOOTSTRAP_ADMIN_PASSWORD:ChangeMe_123456}
+    admin-username: ${BOOTSTRAP_ADMIN_USERNAME:admin}
+    admin-password: ${BOOTSTRAP_ADMIN_PASSWORD:A123456!}
+    max-failed-attempts: ${LOGIN_MAX_FAILED_ATTEMPTS:3}
+    lock-duration: ${LOGIN_LOCK_DURATION:10m}
   ai:
     system-prompt-template: |
       You are the backend bootstrap assistant for locale {locale}.
